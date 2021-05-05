@@ -28,6 +28,7 @@ RUN apt-get update && apt-get -y upgrade \
 		apt-get install -y --no-install-recommends gnupg-curl; \
 	fi;
 
+COPY ./.docker/config/php/php.ini /etc/php/7.2/apache2/php.ini
 COPY ./.docker/config/apache2/env /etc/apache2/envvars
 COPY ./.docker/config/apache2/httpd.conf /etc/apache2/apache2.conf
 COPY ./.docker/config/apache2/vhost.conf /etc/apache2/sites-available/000-default.conf
@@ -77,4 +78,11 @@ RUN \
 WORKDIR /var/www
 
 ENTRYPOINT ["uvdesk-entrypoint.sh"]
+
+WORKDIR /var/www/uvdesk
+RUN composer install && \
+  chmod 777 /var/www/uvdesk/config/packages/uvdesk.yaml && \
+  chmod 777 /var/www/uvdesk/config/packages/swiftmailer.yaml && \
+  chmod 777 /var/www/uvdesk/config/packages/uvdesk_mailbox.yaml
+
 CMD ["/bin/bash"]

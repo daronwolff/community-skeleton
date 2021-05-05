@@ -1,0 +1,29 @@
+version: '3'
+
+volumes:
+    app:
+    mysql-db-data:
+
+services:
+    uvdesk:
+        restart: always
+        image: uvdesk:latest
+        tty: true
+
+        environment:
+            APP_ENV: dev
+            APP_SECRET: changeme123
+            APP_TIMEZONE: America/Merida
+            APP_CURRENCY: USD
+
+            MYSQL_USER: uvdesk
+            MYSQL_PASSWORD: changeme
+            MYSQL_ROOT_PASSWORD: changeme
+            MYSQL_DATABASE: uvdesk
+
+        ports:
+            - 127.0.0.1:8088:80
+
+        volumes:
+            - app:/var/www/uvdesk
+            - mysql-db-data:/var/lib/mysql
